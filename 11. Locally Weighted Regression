@@ -1,0 +1,45 @@
+Aim:
+To implement Locally Weighted Regression (LWR) for fitting data points and plot the fitted curve.
+
+---
+
+Algorithm:
+1. Prepare dataset (X, y).
+2. For each query point, calculate Gaussian weights based on distance.
+3. Perform weighted linear regression using weights.
+4. Predict y-values for query points.
+5. Plot the original data points and fitted curve.
+
+---
+Program:
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+X=np.array([1,2,3,4,5,6,7,8,9])
+y=np.array([1.1,1.9,3,3.9,5.1,6.1,7.2,7.9,9])
+
+def lwr(xq,t=0.5):
+  y_pred=[]
+  for x0 in xq:
+    w=np.exp(-(X - x0)**2/(2*t**2))
+    W=np.diag(w)
+    Xm=np.vstack((np.ones(len(X)),X)).T
+    th=np.linalg.pinv(Xm.T@W@Xm)@(Xm.T@W@y)
+    y_pred.append([1,x0]@th)
+  return y_pred
+
+xq=np.linspace(1,9,100)
+plt.scatter(X,y)
+plt.plot(xq,lwr(xq),'r')
+plt.show()
+
+---
+
+Output:
+Scatter plot of original data points with red fitted curve using LWR.
+
+---
+
+Result:
+LWR successfully fits the data points using local weights, providing a smooth regression curve sensitive to nearby points.
