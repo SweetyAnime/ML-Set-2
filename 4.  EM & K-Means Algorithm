@@ -1,0 +1,60 @@
+Aim:
+To cluster data using EM (Gaussian Mixture Model) and k-Means algorithms and compare their results.
+
+---
+
+Algorithm:
+1. Load data from CSV file.
+2. Apply EM algorithm (GMM) to cluster the data.
+3. Apply k-Means clustering on the same data.
+4. Visualize and compare the cluster results.
+
+---
+
+Sample data.csv content:
+
+x,y
+1.0,2.0
+1.5,1.8
+5.0,8.0
+8.0,8.0
+1.0,0.6
+9.0,11.0
+8.0,2.0
+10.0,2.0
+9.0,3.0
+
+---
+
+Program:
+
+import pandas as pd
+from sklearn.mixture import GaussianMixture
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+X = pd.read_csv('data.csv').values
+gmm = GaussianMixture(3).fit(X)
+lbl_gmm = gmm.predict(X)
+km = KMeans(3).fit(X)
+lbl_km = km.labels_
+
+plt.subplot(1,2,1)
+plt.scatter(X[:,0], X[:,1], c=lbl_gmm)
+plt.title('EM (GMM) Clustering')
+
+plt.subplot(1,2,2)
+plt.scatter(X[:,0], X[:,1], c=lbl_km)
+plt.title('k-Means Clustering')
+
+plt.show()
+
+---
+
+Output:
+Two scatter plots side-by-side showing clusters formed by EM and k-Means.
+
+---
+
+Result:
+Both algorithms successfully cluster the data but differ in assumptions: EM uses Gaussian models allowing elliptical clusters; k-Means uses distance-based spherical clusters. This impacts cluster shape and boundaries.
