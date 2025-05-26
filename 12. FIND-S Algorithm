@@ -1,0 +1,63 @@
+Aim:
+To implement and demonstrate the FIND-S algorithm for finding the most specific hypothesis using training data from a CSV file.
+
+---
+
+Algorithm:
+
+1. Load the training dataset from a CSV file using pandas.
+2. Identify the first positive example in the dataset.
+3. Initialize the hypothesis with the first positive example.
+4. For each subsequent positive example:
+   - Compare each attribute with the current hypothesis.
+   - If the attribute differs, replace it with '?', else keep it the same.
+5. Return the final hypothesis as the most specific hypothesis.
+
+---
+
+Python Program:
+
+import pandas as pd
+import numpy as np
+
+# Load data
+data = pd.read_csv("Ex1_data.csv")
+concepts = np.array(data.iloc[:, :-1])
+target = np.array(data.iloc[:, -1])
+
+# FIND-S Algorithm
+def find_s(concepts, target):
+    for i, val in enumerate(target):
+        if val.lower() == "yes":
+            hypothesis = concepts[i].copy()
+            break
+
+    for i, val in enumerate(concepts):
+        if target[i].lower() == "yes":
+            for j in range(len(hypothesis)):
+                if val[j] != hypothesis[j]:
+                    hypothesis[j] = '?'
+    return hypothesis
+
+final_hypothesis = find_s(concepts, target)
+print("Final Specific Hypothesis:", final_hypothesis)
+
+---
+
+Sample CSV (Ex1_data.csv):
+
+Sky,Temp,Humidity,Wind,Water,Forecast,EnjoySport
+sunny,warm,normal,strong,warm,same,yes
+sunny,warm,high,strong,warm,same,yes
+rainy,cold,high,strong,warm,change,no
+sunny,warm,high,strong,cool,change,yes
+
+---
+
+Expected Output
+Final Specific Hypothesis: ['sunny' 'warm' '?' 'strong' '?' '?']
+
+-----
+
+Result
+Thus, the FIND-S algorithm has been successfully implemented and executed.
