@@ -1,0 +1,47 @@
+Aim:
+To implement the ID3 algorithm using a sample dataset and classify a new instance.
+
+---
+
+Algorithm (ID3 - Simple Steps):
+1. Calculate entropy of dataset.
+2. Choose attribute with highest information gain.
+3. Split dataset and repeat.
+4. Stop when data is pure or no more attributes.
+
+---
+
+Program:
+
+from sklearn.tree import DecisionTreeClassifier
+import pandas as pd
+
+# Sample dataset
+d = {'Outlook': ['Sunny','Rain','Overcast','Sunny'],
+     'Temp': ['Hot','Cool','Mild','Cool'],
+     'Humidity': ['High','Normal','High','Normal'],
+     'Wind': ['Weak','Strong','Weak','Strong'],
+     'Play': ['No','Yes','Yes','Yes']}
+df = pd.DataFrame(d)
+
+X = pd.get_dummies(df.drop('Play', axis=1))
+y = df['Play']
+
+# Train model
+m = DecisionTreeClassifier(criterion='entropy').fit(X, y)
+
+# Predict new input
+s = pd.get_dummies(pd.DataFrame([{'Outlook':'Sunny','Temp':'Cool','Humidity':'High','Wind':'Strong'}]))
+s = s.reindex(columns=X.columns, fill_value=0)
+print("Prediction:", m.predict(s)[0])
+
+---
+
+Output:
+Displays whether to "Play" or "Not" for the given sample (e.g., Sunny, Cool, High, Strong).
+
+
+---
+
+Result:
+The decision tree using ID3 was successfully built and used to classify a new instance.
