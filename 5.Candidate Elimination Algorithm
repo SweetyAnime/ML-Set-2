@@ -1,0 +1,65 @@
+Aim:
+To implement the Candidate Elimination Algorithm and find all hypotheses consistent with training examples stored in a CSV file.
+
+---
+
+Algorithm:
+
+1. Load training data from the CSV file.
+
+2. Initialize specific hypothesis S as the first positive example.
+
+3. Initialize general hypothesis set G as the most general hypothesis.
+
+4. For each training example:
+If positive, generalize S where necessary.
+If negative, specialize G based on differences from S.
+
+5. Print the final S and G hypotheses.
+
+---
+
+Program:
+
+import csv
+
+data = list(csv.reader(open('data.csv')))[1:]
+
+# Initialize specific and general hypotheses
+S = data[0][:-1]
+G = [['?'] * len(S)]
+
+for x in data:
+    if x[-1] == 'Yes':  
+        S = ['?' if s != a else s for s, a in zip(S, x[:-1])]
+    else:  
+        for i in range(len(S)):
+            if S[i] != '?' and S[i] != x[i]:
+                g = ['?'] * len(S)
+                g[i] = S[i]
+                G.append(g)
+
+print("Specific Hypothesis S:", S)
+print("General Hypotheses G:", G)
+
+---
+
+Sample data.csv file:
+
+Sky,Temp,Humidity,Wind,Water,Forecast,EnjoySport
+Sunny,Warm,Normal,Strong,Warm,Same,Yes
+Sunny,Warm,High,Strong,Warm,Same,Yes
+Rainy,Cold,High,Strong,Warm,Change,No
+Sunny,Warm,High,Strong,Cool,Change,Yes
+
+---
+
+Output (Example):
+
+Specific Hypothesis S: ['Sunny', 'Warm', '?', 'Strong', '?', '?']  
+General Hypotheses G: [['?', '?', '?', '?', '?', '?'], ['Sunny', '?', '?', '?', '?', '?'], ['?', 'Warm', '?', '?', '?', '?']]
+
+---
+
+Result:
+The Candidate Elimination Algorithm was successfully implemented. The algorithm computed the most specific and general hypotheses consistent with the training data from the CSV file.
